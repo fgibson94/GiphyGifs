@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Added link to the jQuery Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <!---Header for buttons to appear!-->
+    <div id="headerTopics">
+        <button>Topic1</button>
+    </div>
+    <!---Div for gifs to manifest!-->
+    <div id="bodyGifs"></div>
+
+
+    <!--Javascript/Ajax!-->
+    <script>
+        console.log("hello")
+        //Global Variables
+        var topics = ["dog", "cat", "moose", "gerbil", "panda", "fish", "owl", "dolphin", "orca whale", "squirrel"]
+        //new animal topical saved in variable
+        //
+
+        //Attach jquery to DOM
+
+        //Put btn in div
+        //$("#headerTopics").append(addButton)
+
+        //Functions
+        topics.forEach(function (element) {
+            console.log(element)
+            var tag = $(this).attr("data-name", element)
+            //QueryURL
+            var queryURL = "http://api.giphy.com/v1/gifs/random?api_key=sGlctW6ynxLceAIPn7eix32acjVR1aGp&tag=" + tag + "&rating=G"
+
+            var addButton = $("<button>")
+            // .appendTo(headerTopics);
+            addButton.addClass("animal")
+            addButton.attr("data-name", element)
+            addButton.text(element)
+            //Put btn in div
+            $("#headerTopics").append(addButton)
+         //Ajax Function
+        $.ajax({
+            url: queryURL,
+            method: 'GET'
+
+        }).then(function (response) {
+            console.log(response)
+            var results = response.data;
+
+        })
+})
+       
+
+
+    </script>
+</body>
+
+</html>
