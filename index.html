@@ -25,40 +25,77 @@
         console.log("hello")
         //Global Variables
         var topics = ["dog", "cat", "moose", "gerbil", "panda", "fish", "owl", "dolphin", "orca whale", "squirrel"]
-        //new animal topical saved in variable
-        //
+        var element = topics[0 - 20]
 
         //Attach jquery to DOM
 
-        //Put btn in div
-        //$("#headerTopics").append(addButton)
-
-        //Functions
         topics.forEach(function (element) {
-            console.log(element)
-            var tag = $(this).attr("data-name", element)
-            //QueryURL
-            var queryURL = "http://api.giphy.com/v1/gifs/random?api_key=sGlctW6ynxLceAIPn7eix32acjVR1aGp&tag=" + tag + "&rating=G"
-
             var addButton = $("<button>")
-            // .appendTo(headerTopics);
+
             addButton.addClass("animal")
             addButton.attr("data-name", element)
             addButton.text(element)
             //Put btn in div
             $("#headerTopics").append(addButton)
-         //Ajax Function
-        $.ajax({
-            url: queryURL,
-            method: 'GET'
-
-        }).then(function (response) {
-            console.log(response)
-            var results = response.data;
-
         })
-})
-       
+
+        //Functions
+
+        // 
+        //     console.log(element)
+        //     var tag = $(this).attr("data-name", element)
+        //     //QueryURL
+        //     var queryURL = "http://api.giphy.com/v1/gifs/random?api_key=sGlctW6ynxLceAIPn7eix32acjVR1aGp&tag=" + tag + "&rating=G"
+
+
+
+        //     //Ajax Function
+        //     $.ajax({
+        //         url: queryURL,
+        //         method: 'GET'
+
+        //     }).then(function (response) {
+        //         //console.log(response)
+        //         var results = response.data;
+        //         console.log(results)
+        //     })
+        // })
+        //Button on Click Function
+        $("button").on("click", function () {
+            var tag = $(this).attr("data-name")
+            console.log("Clicked ")
+            //QueryURL
+            var queryURL = "http://api.giphy.com/v1/gifs/search?api_key=sGlctW6ynxLceAIPn7eix32acjVR1aGp&q="+tag+"&limit=10&offset=0&rating=G&lang=en"
+            //Ajax Function
+            console.log(tag)
+            $.ajax({
+                url: queryURL,
+                method: 'GET'
+
+            }).then(function (response) {
+                //console.log(response)
+                var results = response.data;
+                console.log(results)
+
+                for (var i = 0; i < results.length; i++){
+                    var giphyDiv = $("<div class ='item'>");
+
+                    var rating = results[i].rating;
+
+                    var p = $("<p>").text("Rating: "+ rating);
+
+                    var giphyImg = $("<img>");
+                    giphyImg.attr("src", results[i].images.fixed_height.url);
+
+                    giphyDiv.prepend(p);
+                    giphyDiv.prepend(giphyImg);
+
+                    $("#bodyGifs").prepend(giphyDiv);
+                };
+            });
+});
+
+
 
 
     </script>
