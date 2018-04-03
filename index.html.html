@@ -54,7 +54,7 @@
     </div>
 
     <script>
-        console.log("hello")
+
 
         var animals = ["dog", "cat", "moose", "gerbil", "panda", "fish", "owl", "dolphin", "orca whale", "squirrel", "tiger"]
 
@@ -66,7 +66,9 @@
                 var addButton = $("<button>");
                 addButton.addClass("animalName");
                 addButton.attr("data-name", animals[i]);
+                //addButton.attr("data-state", "still")
                 addButton.text(animals[i]);
+
                 $("#buttonRow").append(addButton);
             }
         }
@@ -98,17 +100,35 @@
                     var results = response.data
                     console.log(results)
                     for (i = 0; i < results.length; i++) {
+                        //grab ID var from response for play/pause
+                        var id = results[i].id
                         var giphyDiv = $("<div class = 'item'>")
                         var rating = results[i].rating
                         var p = $("<p>").text("Rating :" + rating);
 
                         var giphyImg = $("<img>");
-                        giphyImg.attr("src", results[i].images.fixed_height.url);
+                        giphyImg.attr("src", results[i].images.fixed_width_still.url);
 
                         giphyDiv.prepend(p);
                         giphyDiv.prepend(giphyImg);
 
                         $("#bodyGifs").prepend(giphyDiv);
+                        //Click to Pause and Play
+                        $(".item").on("click", function () {
+                            console.log("clicked item", id)
+                            var state = $(this).attr("data-state");
+
+                            if (state === "still") {
+                                
+                                $(this).attr("src", "https://media0.giphy.com/media/" + id + "/200w.gif"
+                                );
+                                $(this).attr("data-state", "animate");
+                            } else {
+                                $(this).attr("src", "https://media0.giphy.com/media/" + id + "/200w_s.gif");
+                                $(this).attr("data-state", "still");
+
+                            }
+                        })
                     }
                 })
 
@@ -116,6 +136,30 @@
 
         $(document).on("click", ".animalName", makeGif);
         makeBtn();
+
+        //"https://media0.giphy.com/media/"+results[i].id+"/200w.gif"
+        //live url
+
+        //still url
+        //url + _s.gif"
+        //"https://media0.giphy.com/media/"+results[i].id+"/200w_s.gif"
+
+        //click to animate
+
+        $(".item").on("click", function () {
+            console.log("clicked item")
+            var state = $(this).attr("data-state");
+
+            if (state === "still") {
+                $(this).attr("src", "https://media0.giphy.com/media/" + results[i].id + "/200w.gif"
+                );
+                $(this).attr("data-state", "animate");
+            } else {
+                $(this).attr("src", "https://media0.giphy.com/media/" + results[i].id + "/200w_s.gif");
+                $(this).attr("data-state", "still");
+
+            }
+        })
     </script>
 </body>
 
