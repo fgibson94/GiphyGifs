@@ -1,0 +1,15 @@
+#bodyGifs {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+#newTopic{
+    display: flex;
+    justify-content: flex-end;
+}
+
+header{
+    text-align: center;
+    font: 900;
+    
+}

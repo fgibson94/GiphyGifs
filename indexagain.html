@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- Added link to the jQuery Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Add Bootstrap !-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <!--CSS Link!-->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!--Javascript!-->
+    <script src="assets/javascript/script.js"></script>
+</head>
+
+<body>
+    <header class="jumbotron">
+        <h1>ZooGiphy!</h1>
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="col-md">
+                <!---Header for buttons to appear!-->
+                <div id="buttonRow"></div>
+            </div>
+            <div class="col-md">
+                <!---Header for FORM to appear!-->
+                <div id="newTopic">
+                    <input type="text" id="topicBox">
+                    <input type="submit" value="Add" id="submitBtn">
+                </div>
+            </div>
+
+
+
+        </div>
+        <!--Row1!-->
+
+        <div class="row">
+            <div class="col-sm" id="col1">
+                <!---Div for gifs to manifest!-->
+                <div id="bodyGifs"></div>
+            </div>
+        </div>
+        <!--Row2!-->
+
+
+
+    </div>
+
+    <script>
+        console.log("hello")
+
+        var animals = ["dog", "cat", "moose", "gerbil", "panda", "fish", "owl", "dolphin", "orca whale", "squirrel", "tiger"]
+
+        //make buttons
+        function makeBtn() {
+            $("#buttonRow").empty();
+            //Attach buttons with jquery to html
+            for (i = 0; i < animals.length; i++) {
+                var addButton = $("<button>");
+                addButton.addClass("animalName");
+                addButton.attr("data-name", animals[i]);
+                addButton.text(animals[i]);
+                $("#buttonRow").append(addButton);
+            }
+        }
+        //add buttons
+        $("#submitBtn").on("click", function (event) {
+            event.preventDefault();
+            var newAnimal = $("#topicBox").val().trim()
+            animals.push(newAnimal)
+            console.log(animals)
+            makeBtn();
+        })
+        //CALL FUNCTION TO RENDER ON PAGE
+        makeBtn();
+        //button event listener
+        function makeGif() {
+            //create var for api requests
+            var animal = $(this).attr("data-name")
+            console.log("Clicked ", animal)
+            //QueryURL
+            var queryURL = "http://api.giphy.com/v1/gifs/search?api_key=sGlctW6ynxLceAIPn7eix32acjVR1aGp&q=" + animal + "&limit=10&offset=0&rating=G&lang=en"
+
+            //Ajax Function
+            $.ajax({
+                url: queryURL,
+                method: 'GET'
+            })
+                .then(function (response) {
+                    console.log(response)
+                    var results = response.data
+                    console.log(results)
+                    for (i = 0; i < results.length; i++) {
+                        var giphyDiv = $("<div class = 'item'>")
+                        var rating = results[i].rating
+                        var p = $("<p>").text("Rating :" + rating);
+
+                        var giphyImg = $("<img>");
+                        giphyImg.attr("src", results[i].images.fixed_height.url);
+
+                        giphyDiv.prepend(p);
+                        giphyDiv.prepend(giphyImg);
+
+                        $("#bodyGifs").prepend(giphyDiv);
+                    }
+                })
+
+        }
+
+        $(document).on("click", ".animalName", makeGif);
+        makeBtn();
+    </script>
+</body>
+
+</html>
